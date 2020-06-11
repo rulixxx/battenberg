@@ -4,9 +4,14 @@
 #' @param externalHaplotypeFile Full path of the external vcf containing phased haplotypes (Default: NA)
 #' @param outprefix Full path and prefix of the output files
 #' @author jdemeul
+#' @note Requires VariantAnnotation dependency
 #' @export
 split_input_haplotypes <- function(chrom_names, externalhaplotypefile=NA, outprefix) {
-
+  # Check required packages are available
+  if (!requireNamespace("VariantAnnotation", quietly = TRUE)) {
+    stop("Package \"VariantAnnotation\" is needed for \"split_input_haplotypes\" to work. Please install it.", call. = FALSE)
+  }
+  
   if (is.na(externalhaplotypefile)) return(NULL)
   
   hetsnps <- VariantAnnotation::readVcf(file = externalhaplotypefile,
@@ -31,9 +36,14 @@ split_input_haplotypes <- function(chrom_names, externalhaplotypefile=NA, outpre
 #' @param externalHaplotypeFile Full path to the vcf containing haplotype blocks for the indexed chromosome (Default: NA)
 #' @param oldfilesuffix Suffix to be added to the original imputedHaplotypeFile (Default: _noExt.txt)
 #' @author jdemeul
+#' @note Requires VariantAnnotation
 #' @export
 input_known_haplotypes = function(chrom_names, chrom, imputedHaplotypeFile, externalHaplotypeFile=NA, oldfilesuffix = "_noExt.txt") {
-
+  # Check required packages are available
+  if (!requireNamespace("VariantAnnotation", quietly = TRUE)) {
+    stop("Package \"VariantAnnotation\" is needed for \"input_known_haplotypes\" to work. Please install it.", call. = FALSE)
+  }
+  
   if (is.na(externalHaplotypeFile)) return(NULL)
   
   # read BB phasing input
@@ -115,8 +125,13 @@ input_known_haplotypes = function(chrom_names, chrom, imputedHaplotypeFile, exte
 #' @param chrom_names Names of the chromosomes
 #' @param include_homozygous Include homozygous SNPs in the output vcf file (Default = FALSE)
 #' @author jdemeul
+#' @note Requires VariantAnnotation dependency
 #' @export
 write_battenberg_phasing <- function(tumourname, SNPfiles, imputedHaplotypeFiles, bafsegmented_file, outprefix, chrom_names, include_homozygous = F) {
+  # Check required packages are available
+  if (!requireNamespace("VariantAnnotation", quietly = TRUE)) {
+    stop("Package \"VariantAnnotation\" is needed for \"write_battenberg_phasing\" to work. Please install it.", call. = FALSE)
+  }
   
   bafsegmented <- read_bafsegmented(bafsegmented_file)[, c("Chromosome", "Position", "BAFphased", "BAFseg")]
   bafsegmented <- split(x = bafsegmented[, c("Position", "BAFphased", "BAFseg")], f = bafsegmented$Chromosome)
@@ -185,9 +200,14 @@ write_battenberg_phasing <- function(tumourname, SNPfiles, imputedHaplotypeFiles
 #' @param relative_weight_balanced Relative weight to give to haplotype info from a sample without allelic imbalance in the region (default 0.25)
 #' @param outprefix Prefix of the ouput multisample phasing files
 #' @author jdemeul
+#' @note Requires VariantAnnotation dependency
 #' @export
 get_multisample_phasing <- function(chrom, bbphasingprefixes, maxlag = 100, relative_weight_balanced = .25, outprefix) {
-
+  # Check required packages are available
+  if (!requireNamespace("VariantAnnotation", quietly = TRUE)) {
+    stop("Package \"VariantAnnotation\" is needed for \"get_multisample_phasing\" to work. Please install it.", call. = FALSE)
+  }
+  
   vcfs <- lapply(X = paste0(bbphasingprefixes, chrom, ".vcf"), FUN = VariantAnnotation::readVcf)
   samplenames <- sapply(X = vcfs, FUN = function(x) VariantAnnotation::samples(VariantAnnotation::header(x)))
   
@@ -281,9 +301,14 @@ get_multisample_phasing <- function(chrom, bbphasingprefixes, maxlag = 100, rela
 #' @param tumournames Vector of sample names
 #' @param plotting Should the multisample phasing plots be made? (Default: TRUE)
 #' @author jdemeul
+#' @note Requires GenomicRanges dependency
 #' @export
 call_multisample_MSAI <- function(rdsprefix, subclonesfiles, chrom_names, tumournames, plotting = T) {
-
+  # Check required packages are available
+  if (!requireNamespace("GenomicRanges", quietly = TRUE)) {
+    stop("Package \"GenomicRanges\" is needed for \"call_multisample_MSAI\" to work. Please install it.", call. = FALSE)
+  }
+  
   # compile all CN results
   subclonescat <- lapply(X = subclonesfiles, FUN = function(x) read.delim(file = x, as.is = T))
   imbalancedregions <- do.call(rbind, subclonescat)
