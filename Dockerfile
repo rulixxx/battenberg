@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 USER root
 
 # Add dependencies
-RUN apt-get update && apt-get install -y libxml2 libxml2-dev libcurl4-gnutls-dev r-cran-rgl git libssl-dev curl
+RUN apt-get update && apt-get install -y libxml2 libxml2-dev libcurl4-gnutls-dev r-cran-rgl git libssl-dev curl openjdk-8-jdk
 
 RUN mkdir /tmp/downloads
 
@@ -30,8 +30,8 @@ RUN curl -sSL -o tmp.tar.gz --retry 10 https://mathgen.stats.ox.ac.uk/impute/imp
     tar -C /tmp/downloads/impute2 --strip-components 1 -zxf tmp.tar.gz && \
     cp /tmp/downloads/impute2/impute2 /usr/local/bin && \
     rm -rf /tmp/downloads/impute2 /tmp/downloads/tmp.tar.gz
-
-RUN R -q -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("gtools", "optparse", "devtools","RColorBrewer","ggplot2","gridExtra","readr","doParallel","foreach", "splines"))'
+    
+RUN R -q -e 'source("http://bioconductor.org/biocLite.R"); biocLite(c("gtools", "optparse", "devtools","RColorBrewer","ggplot2","gridExtra","readr","doParallel","foreach", "splines", "VariantAnnotation"))'
 RUN R -q -e 'devtools::install_github("Crick-CancerGenomics/ascat/ASCAT")'
 
 RUN mkdir -p /opt/battenberg
