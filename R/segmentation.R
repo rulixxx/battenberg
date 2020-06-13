@@ -414,8 +414,15 @@ segment.baf.phased = function(samplename, inputfile, outputfile, prior_breakpoin
 #' @param gamma The gamma parameter controls the size of the penalty of starting a new segment during segmentation. It is therefore the key parameter for controlling the number of segments (Default 10)
 #' @param calc_seg_baf_option Various options to recalculate the BAF of a segment. Options are: 1 - median, 2 - mean, 3 - ifelse median==0 or 1, median, mean. (Default: 3)
 #' @author jdemeul, sd11
+#' @note Requires copynumber dependency
 #' @export
 segment.baf.phased.multisample = function(samplename, inputfile, outputfile, prior_breakpoints_file=NULL, gamma=10, calc_seg_baf_option=3) {
+  
+  # Check required packages are available
+  if (!requireNamespace("copynumber", quietly = TRUE)) {
+    stop("Package \"copynumber\" is needed for \"segment.baf.phased.multisample\" to work. Please install it.", call. = FALSE)
+  }
+  
   ##### internal function definitions
   # Function that takes SNPs that belong to a single segment and looks for big holes between
   # each pair of SNPs. If there is a big hole it will add another breakpoint to the breakpoints data.frame

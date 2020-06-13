@@ -33,6 +33,7 @@ Imports:
 Suggests:
   VariantAnnotation,
   GenomicRanges
+  copynumber
 URL: https://github.com/Wedge-Oxford/battenberg
 LazyLoad: yes
 Suggests:
