@@ -65,10 +65,10 @@ parse.imputeinfofile = function(imputeinfofile, is.male, chrom=NA) {
   colnames(impute.info) = c("chrom", "impute_legend", "genetic_map", "impute_hap", "start", "end", "is_par")
   # Remove the non-pseudo autosomal region (i.e. where not both men and woman are diploid)
   if(is.male){ impute.info = impute.info[impute.info$is_par==1,] }
-  chr_names=unique(impute.info$chrom)
+  #chr_names=unique(impute.info$chrom)
   # Subset for a particular chromosome
   if (!is.na(chrom)) {
-    impute.info = impute.info[impute.info$chrom==chr_names[chrom],]
+    impute.info = impute.info[impute.info$chrom==chrom,]
   }
   return(impute.info)
 }
